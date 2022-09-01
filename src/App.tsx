@@ -1,14 +1,16 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { Router } from './routes';
+import { GlobalStyles } from './styles/global';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+      <GlobalStyles />
+    </>
   );
 }
 
