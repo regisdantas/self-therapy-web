@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 const Login = React.lazy(
   () =>
     import(
@@ -35,13 +35,45 @@ const CreateAccount = React.lazy(
     ),
 );
 
+import { isAuthenticated } from '../services/auth';
+
+interface IProtectedRouteProps {
+  children: JSX.Element;
+}
+
+export const ProtectedRoute = ({ children }: IProtectedRouteProps) => {
+  return isAuthenticated() ? children : <Navigate to="/login" />;
+};
+
 export const Router: React.FC = () => {
   return (
     <React.Suspense fallback={'Loading...'}>
       <Routes>
-        <Route element={<Login />} path="/" />
-        <Route element={<Dashboard />} path="/dashboard" />
-        <Route element={<Project />} path="/project" />
+        <Route
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+          path="/"
+        />
+        <Route
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+          path="/dashboard"
+        />
+        <Route
+          element={
+            <ProtectedRoute>
+              <Project />
+            </ProtectedRoute>
+          }
+          path="/project"
+        />
+        <Route element={<Login />} path="/login" />
         <Route element={<ForgotPassword />} path="/forgot-password" />
         <Route element={<CreateAccount />} path="/create-account" />
       </Routes>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Title, Form, Error, Input } from './styles';
 import { isValidEmail } from '../../util';
-import { backend } from '../../services/backend';
-import { AxiosError } from 'axios';
+import { api } from '../../services/api';
+import { login } from '../../services/auth';
 
 interface IError {
   message: string;
@@ -52,11 +52,15 @@ const Login: React.FC = () => {
       return;
     }
     try {
-      const response = await backend.post<IAuthResp>(`sessions`, {
+      const response = await api.post<IAuthResp>(`sessions`, {
         email: email,
         password: password,
       });
-      console.log(response);
+      const token = response.data.token;
+      const user = response.data.user;
+      localStorage.setItem('token', token);
+      login(token);
+      window.location.href = '/dashboard';
     } catch (error) {
       setInputError({
         message: 'Authentication failed.',
