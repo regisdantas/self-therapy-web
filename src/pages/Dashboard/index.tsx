@@ -117,6 +117,7 @@ const Dashboard: React.FC = () => {
           <input
             ref={inputRef}
             type="text"
+            placeholder="new project name"
             onChange={handleChangeProjectName}
           />
         </Form>
