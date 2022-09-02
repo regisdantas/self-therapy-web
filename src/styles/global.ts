@@ -18,6 +18,7 @@ html {
 }
 
 body {
+  align-self: center;
   background: #f0f0f5;
   -wekit-font-smoothing: antialiased;
   display: flex;

@@ -6,25 +6,50 @@ export const Title = styled.h1`
 `;
 
 export const CardContainer = styled.div`
-  background: #fff;
-  border-radius: 5px;
+  max-width: 700px;
   width: 100%;
-  padding: 12px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.2s;
-  margin-top: 16px;
+
+  padding: 0px;
+  margin: 6px 0px 0px 0px;
+
+  border-radius: 5px;
+  /* border: 1px solid #04d361; */
+  border-right: 3px solid lightgray;
+  border-bottom: 3px solid lightgray;
+  background: #fff;
+
+  div {
+    border-radius: 0px;
+    margin: 0px -1px -1px 0px;
+    margin-top: 0px;
+  }
 
   strong {
     width: 100%;
+    padding: 10px;
   }
 
-  p {
+  span {
+    border: 0px;
+    padding: 10px;
     width: 100%;
+    text-align: justify;
+
+    max-height: 200px;
+    overflow: hidden;
   }
 
-  &:hover {
-    transform: translateX(6px);
+  span:empty::before {
+    content: attr(data-placeholder);
+    display: inline-block;
+    color: lightgray;
+  }
+
+  span:focus {
+    outline: none;
   }
 `;

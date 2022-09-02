@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardContainer } from './styles';
+import { getTitle, getPlaceholder } from '../../models/steps';
 
 interface IStep {
   id: string;
@@ -13,33 +14,26 @@ interface IStep {
 }
 
 interface ICardProps {
-  id: string;
-  title: string;
-  content: string;
-  steps: IStep[];
+  step: IStep;
+  list: IStep[];
 }
 
-const Card: React.FC<ICardProps> = ({
-  id,
-  title,
-  content,
-  steps,
-}: ICardProps) => {
+const Card: React.FC<ICardProps> = ({ step, list }: ICardProps) => {
   return (
     <CardContainer>
-      <strong>{title}</strong>
-      <p>{content}</p>
-      {steps.map(step =>
-        step.parent_id === id ? (
-          <Card
-            key={step.id}
-            id={step.id}
-            title={step.type}
-            content={step.content}
-            steps={steps}
-          />
+      <strong>{getTitle(step.type)}</strong>
+      <span
+        role="textbox"
+        contentEditable
+        data-placeholder={getPlaceholder(step.type)}
+      >
+        {step.content}
+      </span>
+      {list.map(child =>
+        child.parent_id === step.id ? (
+          <Card key={child.id} step={child} list={list} />
         ) : (
-          <></>
+          <div key={step.id} />
         ),
       )}
     </CardContainer>

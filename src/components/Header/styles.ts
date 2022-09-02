@@ -6,7 +6,6 @@ export const Title = styled.h1`
 `;
 
 export const HeaderContainer = styled.header`
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,9 +24,7 @@ export const HeaderContainer = styled.header`
   }
   p {
     font-size: 12px;
-    width: 100%;
-    text-align: right;
-    margin-right: 100px;
+    margin-left: 200px;
   }
 
   @media (max-width: 400px) {
