@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Title = styled.h1`
   font-size: 36px;
@@ -11,6 +11,7 @@ export const HeaderContainer = styled.header`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
   img {
     width: 60px;
     height: 64px;
@@ -23,10 +24,25 @@ export const HeaderContainer = styled.header`
     justify-content: space-around;
     align-items: center;
   }
+  svg {
+    cursor: pointer;
+  }
+
+  a {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      margin-right: 20px;
+      border-radius: 0%;
+    }
+  }
 `;
 
 export const Disabled = styled.span`
   svg {
     color: lightgrey;
+    cursor: default;
   }
 `;

@@ -4,6 +4,7 @@ import { Title, Form, Error, Input } from './styles';
 import { isValidEmail } from '../../util';
 import { api } from '../../services/api';
 import { login } from '../../services/auth';
+import Header from '../../components/Header';
 
 interface IError {
   message: string;
@@ -84,9 +85,7 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <NavLink to="/">
-        <Title>Self Therapy</Title>
-      </NavLink>
+      <Header title="Self Therapy"></Header>
       <Form onSubmit={handleSignIn}>
         <Input
           hasError={Boolean(inputError?.field.includes('email'))}

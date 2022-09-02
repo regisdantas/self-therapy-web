@@ -1,9 +1,11 @@
 import React from 'react';
-import { useLocation, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { api } from '../../services/api';
 import { Form, Projects, Error } from './styles';
 import Header from '../../components/Header';
+import MenuBar from '../../components/MenuBar';
 import { FiTrash2 } from 'react-icons/fi';
+import { logout } from '../../services/auth';
 
 interface IError {
   message: string;
@@ -27,20 +29,12 @@ interface IProject {
   updatedAt: string;
 }
 
-interface ILocationState {
-  from: {
-    pathname: string;
-  };
-  user: IUser;
-}
-
 const Dashboard: React.FC = () => {
   const [projects, setProjects] = React.useState<IProject[]>([]);
   const [newProjectName, setNewProjectName] = React.useState('');
   const [inputError, setInputError] = React.useState<IError | null>(null);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-  const location = useLocation();
-  // const { user } = location.state as ILocationState;
+
   React.useEffect(() => {
     api
       .get(`users/projects`)
@@ -98,7 +92,8 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Header title="Self Therapy" backPath="" />
+      <Header title="Self Therapy" />
+      <MenuBar backPath="" handleLogout={logout} />
       <Projects>
         <Form onSubmit={handleNewProject}>
           <input
@@ -110,7 +105,7 @@ const Dashboard: React.FC = () => {
         {inputError && <Error>{inputError.message}</Error>}
         {projects.map(project => (
           <div key={project.id}>
-            <NavLink to="/project">
+            <NavLink to="/project" state={{ project_id: project.id }}>
               <strong>{project.name}</strong>
             </NavLink>
             <FiTrash2

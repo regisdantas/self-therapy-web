@@ -9,4 +9,5 @@ export const login = (token: string) => {
 
 export const logout = () => {
   localStorage.removeItem(TOKEN_KEY);
+  window.location.href = '/';
 };
