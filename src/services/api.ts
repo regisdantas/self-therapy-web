@@ -5,7 +5,7 @@ const server_url = process.env.REACT_APP_SERVER_URL || 'http://localhost';
 
 export const api = axios.create({
   baseURL:
-    `${server_url}` + process.env.REACT_APP_SERVER_PORT
+    `${server_url}` + (process.env.REACT_APP_SERVER_PORT !== undefined)
       ? `:${process.env.REACT_APP_SERVER_PORT}`
       : '',
 });
