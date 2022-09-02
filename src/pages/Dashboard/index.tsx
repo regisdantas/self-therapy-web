@@ -1,16 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { api } from '../../services/api';
-import { Form, Projects, Error } from './styles';
+import { Form, Projects } from './styles';
 import Header from '../../components/Header';
 import MenuBar from '../../components/MenuBar';
 import { FiTrash2 } from 'react-icons/fi';
 import { logout } from '../../services/auth';
-
-interface IError {
-  message: string;
-  field: string;
-}
+import { useStatus } from '../../hooks/useStatus';
+import Status from '../../components/Status';
 
 interface IUser {
   id: string;
@@ -32,7 +29,7 @@ interface IProject {
 const Dashboard: React.FC = () => {
   const [projects, setProjects] = React.useState<IProject[]>([]);
   const [newProjectName, setNewProjectName] = React.useState('');
-  const [inputError, setInputError] = React.useState<IError | null>(null);
+  const [inputStatus, setInputStatus] = useStatus(null);
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   React.useEffect(() => {
@@ -47,8 +44,9 @@ const Dashboard: React.FC = () => {
   async function handleNewProject(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (newProjectName === '') {
-      setInputError({
-        field: 'project',
+      setInputStatus({
+        type: 'error',
+        fields: 'project',
         message: 'Project name must not be empty.',
       });
       return;
@@ -66,7 +64,7 @@ const Dashboard: React.FC = () => {
       inputRef.current.value = '';
     }
     setNewProjectName('');
-    setInputError(null);
+    setInputStatus(null);
     return;
   }
 
@@ -102,7 +100,7 @@ const Dashboard: React.FC = () => {
             onChange={handleChangeProjectName}
           />
         </Form>
-        {inputError && <Error>{inputError.message}</Error>}
+        <Status status={inputStatus} />
         {projects.map(project => (
           <div key={project.id}>
             <NavLink to="/project" state={{ project_id: project.id }}>

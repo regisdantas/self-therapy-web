@@ -7,6 +7,7 @@ export const Title = styled.h1`
 
 export const MenuBarContainer = styled.div`
   width: 100%;
+  margin-top: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;

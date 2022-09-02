@@ -1,16 +1,12 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Title, Form, Error, Input } from './styles';
+import { Form, Input } from './styles';
 import { isValidEmail } from '../../util';
 import { api } from '../../services/api';
 import { login } from '../../services/auth';
 import Header from '../../components/Header';
-
-interface IError {
-  message: string;
-  field: string;
-}
-
+import { useStatus } from '../../hooks/useStatus';
+import Status from '../../components/Status';
 interface IAuthResp {
   user: {
     id: string;
@@ -26,30 +22,33 @@ interface IAuthResp {
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
-  const [inputError, setInputError] = React.useState<IError | null>(null);
+  const [inputStatus, setInputStatus] = useStatus(null);
   const navigate = useNavigate();
   async function handleSignIn(
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> {
     event.preventDefault();
     if (!email || email === '') {
-      setInputError({
-        message: 'Email field must not be empty.',
-        field: 'email',
+      setInputStatus({
+        type: 'error',
+        message: 'Email fields must not be empty.',
+        fields: 'email',
       });
       return;
     }
     if (!password || password === '') {
-      setInputError({
-        message: 'Password field must not be empty.',
-        field: 'password',
+      setInputStatus({
+        type: 'error',
+        message: 'Password fields must not be empty.',
+        fields: 'password',
       });
       return;
     }
     if (!isValidEmail(email)) {
-      setInputError({
+      setInputStatus({
+        type: 'error',
         message: 'Enter a valid email address.',
-        field: 'email',
+        fields: 'email',
       });
       return;
     }
@@ -64,13 +63,14 @@ const Login: React.FC = () => {
       login(token);
       navigate('/dashboard', { state: { user: user } });
     } catch (error) {
-      setInputError({
+      setInputStatus({
+        type: 'error',
         message: 'Authentication failed.',
-        field: 'email,password',
+        fields: 'email,password',
       });
       return;
     }
-    setInputError(null);
+    setInputStatus(null);
   }
 
   function handleChangeEmail(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -87,20 +87,20 @@ const Login: React.FC = () => {
     <>
       <Header title="Self Therapy"></Header>
       <Form onSubmit={handleSignIn}>
+        <Status status={inputStatus} />
         <Input
-          hasError={Boolean(inputError?.field.includes('email'))}
+          hasError={Boolean(inputStatus?.fields.includes('email'))}
           type="text"
           placeholder="email"
           onChange={handleChangeEmail}
         />
         <Input
-          hasError={Boolean(inputError?.field.includes('password'))}
+          hasError={Boolean(inputStatus?.fields.includes('password'))}
           type="password"
           placeholder="password"
           onChange={handleChangePassword}
         />
         <button type="submit">Sign in</button>
-        {inputError && <Error>{inputError.message}</Error>}
         <NavLink to="/forgot-password">Forgot password</NavLink>
         <NavLink to="/create-account">Create Account</NavLink>
       </Form>

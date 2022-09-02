@@ -8,33 +8,17 @@ export const Title = styled.h1`
 export const HeaderContainer = styled.header`
   width: 400px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-
-  img {
-    width: 60px;
-    height: 64px;
-    border-radius: 50%;
-  }
-  div {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-  }
-  svg {
-    cursor: pointer;
-  }
 
   a {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
     img {
-      margin-right: 20px;
+      width: 60px;
+      height: 64px;
+      flex: 1;
+      margin-right: 45px;
       border-radius: 0%;
     }
   }
