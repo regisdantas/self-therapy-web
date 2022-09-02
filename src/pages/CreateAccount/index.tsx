@@ -132,7 +132,7 @@ const CreateAccount: React.FC = () => {
         />
         <Input
           hasError={Boolean(inputStatus?.fields.includes('email'))}
-          type="text"
+          type="email"
           placeholder="email"
           onChange={e => handleChange('email', e.target.value)}
         />

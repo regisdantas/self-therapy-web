@@ -90,7 +90,7 @@ const Login: React.FC = () => {
         <Status status={inputStatus} />
         <Input
           hasError={Boolean(inputStatus?.fields.includes('email'))}
-          type="text"
+          type="email"
           placeholder="email"
           onChange={handleChangeEmail}
         />
