@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     if (!email || email === '') {
       setInputStatus({
         type: 'error',
-        message: 'Email fields must not be empty.',
+        message: 'Email field must not be empty.',
         fields: 'email',
       });
       return;
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
     if (!password || password === '') {
       setInputStatus({
         type: 'error',
-        message: 'Password fields must not be empty.',
+        message: 'Password field must not be empty.',
         fields: 'password',
       });
       return;

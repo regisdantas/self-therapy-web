@@ -103,11 +103,6 @@ const CreateAccount: React.FC = () => {
         email: userData.email,
         password: userData.password,
       });
-      setInputStatus({
-        type: 'success',
-        fields: '',
-        message: 'User created successfuly.',
-      });
       setTimeout(() => navigate('/login'), 3000);
     } catch (error: any) {
       setInputStatus({
@@ -117,8 +112,11 @@ const CreateAccount: React.FC = () => {
       });
       return;
     }
-
-    setInputStatus(null);
+    setInputStatus({
+      type: 'success',
+      fields: '',
+      message: 'User created successfully.',
+    });
   }
 
   return (

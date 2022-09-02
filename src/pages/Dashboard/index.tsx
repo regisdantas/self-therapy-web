@@ -57,14 +57,23 @@ const Dashboard: React.FC = () => {
       });
       const newProject = response.data as IProject;
       setProjects(prevState => [...prevState, newProject]);
-    } catch (error) {
+    } catch (error: any) {
+      setInputStatus({
+        type: 'error',
+        message: 'Request failed: ' + error.response.data.message,
+        fields: 'project',
+      });
       return;
     }
     if (inputRef.current) {
       inputRef.current.value = '';
     }
     setNewProjectName('');
-    setInputStatus(null);
+    setInputStatus({
+      type: 'success',
+      fields: '',
+      message: 'Project created successfully.',
+    });
     return;
   }
 
@@ -84,8 +93,19 @@ const Dashboard: React.FC = () => {
         setProjects(prevState =>
           prevState.filter(project => project.id !== pid),
         );
+        setInputStatus({
+          type: 'success',
+          fields: '',
+          message: 'Project deleted successfully.',
+        });
       })
-      .catch();
+      .catch((error: any) => {
+        setInputStatus({
+          type: 'error',
+          message: 'Request to delete project: ' + error.response.data.message,
+          fields: '',
+        });
+      });
   }
 
   return (

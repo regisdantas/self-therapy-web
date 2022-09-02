@@ -8,11 +8,12 @@ export const Title = styled.h1`
 export const HeaderContainer = styled.header`
   width: 400px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
+  flex-direction: column;
+  align-items: center;
   a {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     img {
       width: 60px;
@@ -21,6 +22,12 @@ export const HeaderContainer = styled.header`
       margin-right: 45px;
       border-radius: 0%;
     }
+  }
+  p {
+    font-size: 12px;
+    width: 100%;
+    text-align: right;
+    margin-right: 100px;
   }
 `;
 
