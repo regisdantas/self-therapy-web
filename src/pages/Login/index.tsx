@@ -26,6 +26,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
   const [inputError, setInputError] = React.useState<IError | null>(null);
+  const navigate = useNavigate();
   async function handleSignIn(
     event: React.FormEvent<HTMLFormElement>,
   ): Promise<void> {
@@ -60,7 +61,7 @@ const Login: React.FC = () => {
       const user = response.data.user;
       localStorage.setItem('token', token);
       login(token);
-      window.location.href = '/dashboard';
+      navigate('/dashboard', { state: { user: user } });
     } catch (error) {
       setInputError({
         message: 'Authentication failed.',
