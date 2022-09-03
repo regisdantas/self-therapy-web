@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { shade } from 'polished';
+import { lighten, shade } from 'polished';
 
 export const Title = styled.h1`
   font-size: 36px;
@@ -24,6 +24,10 @@ export const CardContainer = styled.div<CardProps>`
   background-color: #eee;
   border-radius: 5px;
   border-left: 3px dashed lightgray;
+  ${props =>
+    css`
+      border-left-color: ${lighten(0.4, props.color)};
+    `}
 
   div {
     margin-left: 10px;

@@ -1,12 +1,7 @@
 import React from 'react';
 import { CardContainer } from './styles';
-import {
-  getTitle,
-  getPlaceholder,
-  getActions,
-  getColor,
-} from '../../models/steps';
-import { FiTrash2 } from 'react-icons/fi';
+import { getCardModel } from '../../models/steps';
+import { FiTrash2, FiMic } from 'react-icons/fi';
 
 interface IStep {
   id: string;
@@ -24,6 +19,9 @@ interface ICardProps {
   list: IStep[];
   onNewCard: any;
   onDeleteCard: any;
+  onStartListening: any;
+  onStopListening: any;
+  transcript: string;
 }
 
 const Card: React.FC<ICardProps> = ({
@@ -31,13 +29,18 @@ const Card: React.FC<ICardProps> = ({
   list,
   onNewCard,
   onDeleteCard,
+  onStartListening,
+  onStopListening,
+  transcript,
 }: ICardProps) => {
-  const actions = getActions(step.type);
+  const cardModel = getCardModel(step.type);
   return (
-    <CardContainer color={getColor(step.type)}>
+    <CardContainer color={cardModel.color}>
       <div className="ContentContainer">
         <header>
-          <strong>{getTitle(step.type)}</strong>
+          <cardModel.icon />
+          <strong>{cardModel.title}</strong>
+          <FiMic onClick={onStartListening} />
           {step.parent_id !== '00000000-0000-0000-0000-000000000000' ? (
             <FiTrash2 onClick={e => onDeleteCard(step.id)}></FiTrash2>
           ) : (
@@ -48,10 +51,12 @@ const Card: React.FC<ICardProps> = ({
         <span
           role="textbox"
           contentEditable
-          data-placeholder={getPlaceholder(step.type)}
-        ></span>
+          data-placeholder={cardModel.placeholder}
+        >
+          {transcript}
+        </span>
         <div className="ActionContainer">
-          {actions.map((action, index) => (
+          {cardModel.actions.map((action, index) => (
             <p key={index} onClick={e => onNewCard(step.id, action.type)}>
               <action.icon />
               {action.name}
@@ -68,6 +73,9 @@ const Card: React.FC<ICardProps> = ({
             list={list}
             onNewCard={onNewCard}
             onDeleteCard={onDeleteCard}
+            onStartListening={onStartListening}
+            onStopListening={onStopListening}
+            transcript={transcript}
           />
         ) : (
           <div key={step.id} />

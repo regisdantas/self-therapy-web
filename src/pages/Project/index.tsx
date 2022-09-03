@@ -7,6 +7,9 @@ import { logout } from '../../services/auth';
 import { api } from '../../services/api';
 import Status from '../../components/Status';
 import { useStatus } from '../../hooks/useStatus';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 
 interface ILocationState {
   from: {
@@ -31,6 +34,17 @@ const Project: React.FC = () => {
   const [inputStatus, setInputStatus] = useStatus(null);
   const location = useLocation();
   const { project_id } = location.state as ILocationState;
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    console.log('Speech Recognition not supported');
+  }
+
   React.useEffect(() => {
     api
       .get(`users/projects/steps`, { params: { project_id } })
@@ -82,6 +96,15 @@ const Project: React.FC = () => {
       });
   }
 
+  function onStartListening() {
+    SpeechRecognition.startListening();
+  }
+
+  function onStopListening() {
+    SpeechRecognition.stopListening();
+    resetTranscript();
+  }
+
   return (
     <>
       <Header title="Self Therapy" />
@@ -95,6 +118,9 @@ const Project: React.FC = () => {
             list={steps}
             onNewCard={onNewCard}
             onDeleteCard={onDeleteCard}
+            onStartListening={onStartListening}
+            onStopListening={onStopListening}
+            transcript={transcript}
           />
         ) : (
           <></>
