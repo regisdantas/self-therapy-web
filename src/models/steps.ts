@@ -42,7 +42,7 @@ const newQuestion = {
 const EventCardModel: ICardModel = {
   title: 'Event or Situation',
   icon: BiCalendarExclamation,
-  color: 'red',
+  color: 'purple',
   placeholder:
     'Describe the event or situation that driven you to think and/or feel the way you want to evaluate.',
   actions: [newEmotion, newBehavior, newThought],

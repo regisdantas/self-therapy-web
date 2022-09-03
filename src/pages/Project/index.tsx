@@ -64,6 +64,12 @@ const Project: React.FC = () => {
     console.log('Request made to: users/projects/steps: ', project_id);
   }, [project_id]);
 
+  function updateStep(oldStep: IStep, newStep: IStep) {
+    setSteps(prevState => {
+      return prevState.map(step => (step.id === oldStep.id ? newStep : step));
+    });
+  }
+
   function onNewCard(parent_id: string, type: string): void {
     api
       .post(`users/projects/steps`, { project_id, parent_id, type })
@@ -115,6 +121,8 @@ const Project: React.FC = () => {
           fields: '',
           message: 'Changes saved.',
         });
+        const newStep = response.data;
+        updateStep(step, newStep);
       })
       .catch((error: any) => {
         console.log(error);
@@ -135,9 +143,10 @@ const Project: React.FC = () => {
     setListeningId(id);
   }
 
-  function onStopListening(id: string) {
+  function onStopListening(id: string, content: string) {
     SpeechRecognition.stopListening();
     setListeningId('');
+    onChangeContent(id, content);
     resetTranscript();
   }
 

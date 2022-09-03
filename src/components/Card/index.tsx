@@ -32,6 +32,7 @@ const Card: React.FC<ICardProps> = ({
   speechIf,
 }: ICardProps) => {
   const cardModel = getCardModel(step.type);
+  const textRef = React.useRef<HTMLSpanElement>(null);
   return (
     <CardContainer color={cardModel.color}>
       <div className="ContentContainer">
@@ -41,7 +42,7 @@ const Card: React.FC<ICardProps> = ({
           <FiMic
             onClick={() => {
               speechIf.isListening(step.id)
-                ? speechIf.onStopListening(step.id)
+                ? speechIf.onStopListening(step.id, textRef.current?.innerText)
                 : speechIf.onStartListening(step.id);
             }}
           />
@@ -53,12 +54,14 @@ const Card: React.FC<ICardProps> = ({
         </header>
 
         <span
+          ref={textRef}
           role="textbox"
           contentEditable
           data-placeholder={cardModel.placeholder}
           onBlur={e => onChangeContent(step.id, e.currentTarget.innerText)}
+          suppressContentEditableWarning={true}
         >
-          {step.content}
+          {`${step.content}${speechIf.getTranscript(step.id)}`}
           {/* {speechIf.getTranscript(step.id)} */}
         </span>
         <div className="ActionContainer">
@@ -83,7 +86,7 @@ const Card: React.FC<ICardProps> = ({
             speechIf={speechIf}
           />
         ) : (
-          <div key={step.id} />
+          <div key={child.id} />
         ),
       )}
     </CardContainer>
