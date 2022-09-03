@@ -19,9 +19,8 @@ interface ICardProps {
   list: IStep[];
   onNewCard: any;
   onDeleteCard: any;
-  onStartListening: any;
-  onStopListening: any;
-  transcript: string;
+  onChangeContent: any;
+  speechIf: any;
 }
 
 const Card: React.FC<ICardProps> = ({
@@ -29,9 +28,8 @@ const Card: React.FC<ICardProps> = ({
   list,
   onNewCard,
   onDeleteCard,
-  onStartListening,
-  onStopListening,
-  transcript,
+  onChangeContent,
+  speechIf,
 }: ICardProps) => {
   const cardModel = getCardModel(step.type);
   return (
@@ -40,7 +38,13 @@ const Card: React.FC<ICardProps> = ({
         <header>
           <cardModel.icon />
           <strong>{cardModel.title}</strong>
-          <FiMic onClick={onStartListening} />
+          <FiMic
+            onClick={() => {
+              speechIf.isListening(step.id)
+                ? speechIf.onStopListening(step.id)
+                : speechIf.onStartListening(step.id);
+            }}
+          />
           {step.parent_id !== '00000000-0000-0000-0000-000000000000' ? (
             <FiTrash2 onClick={e => onDeleteCard(step.id)}></FiTrash2>
           ) : (
@@ -52,8 +56,10 @@ const Card: React.FC<ICardProps> = ({
           role="textbox"
           contentEditable
           data-placeholder={cardModel.placeholder}
+          onBlur={e => onChangeContent(step.id, e.currentTarget.innerText)}
         >
-          {transcript}
+          {step.content}
+          {/* {speechIf.getTranscript(step.id)} */}
         </span>
         <div className="ActionContainer">
           {cardModel.actions.map((action, index) => (
@@ -73,9 +79,8 @@ const Card: React.FC<ICardProps> = ({
             list={list}
             onNewCard={onNewCard}
             onDeleteCard={onDeleteCard}
-            onStartListening={onStartListening}
-            onStopListening={onStopListening}
-            transcript={transcript}
+            onChangeContent={onChangeContent}
+            speechIf={speechIf}
           />
         ) : (
           <div key={step.id} />

@@ -10,6 +10,7 @@ import { useStatus } from '../../hooks/useStatus';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+import { stringify } from 'querystring';
 
 interface ILocationState {
   from: {
@@ -29,11 +30,19 @@ interface IStep {
   upgatedAt: string;
 }
 
+interface ISpeechIf {
+  onStartListening: any;
+  onStopListening: any;
+  isListening: any;
+  getTranscript: any;
+}
+
 const Project: React.FC = () => {
   const [steps, setSteps] = React.useState<IStep[]>([]);
   const [inputStatus, setInputStatus] = useStatus(null);
   const location = useLocation();
   const { project_id } = location.state as ILocationState;
+  const [listeningId, setListeningId] = React.useState('');
   const {
     transcript,
     listening,
@@ -96,14 +105,57 @@ const Project: React.FC = () => {
       });
   }
 
-  function onStartListening() {
-    SpeechRecognition.startListening();
+  function onChangeContent(id: string, content: string) {
+    const step = steps.filter(step => step.id === id)[0];
+    api
+      .patch(`users/projects/steps`, { step_id: step.id, content })
+      .then(response => {
+        setInputStatus({
+          type: 'success',
+          fields: '',
+          message: 'Changes saved.',
+        });
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setInputStatus({
+          type: 'error',
+          message: 'Failed to save changes: ' + error.response.data.message,
+          fields: '',
+        });
+      });
   }
 
-  function onStopListening() {
+  function onStartListening(id: string) {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    }
+    SpeechRecognition.startListening({ continuous: true });
+    resetTranscript();
+    setListeningId(id);
+  }
+
+  function onStopListening(id: string) {
     SpeechRecognition.stopListening();
+    setListeningId('');
     resetTranscript();
   }
+
+  function isListening(id: string) {
+    return listeningId === id;
+  }
+
+  function getTranscript(id: string) {
+    if (listeningId === id) return transcript;
+    return '';
+  }
+
+  const speechIf: ISpeechIf = {
+    onStartListening: onStartListening,
+    onStopListening: onStopListening,
+    isListening: isListening,
+    getTranscript: getTranscript,
+  };
 
   return (
     <>
@@ -118,9 +170,8 @@ const Project: React.FC = () => {
             list={steps}
             onNewCard={onNewCard}
             onDeleteCard={onDeleteCard}
-            onStartListening={onStartListening}
-            onStopListening={onStopListening}
-            transcript={transcript}
+            onChangeContent={onChangeContent}
+            speechIf={speechIf}
           />
         ) : (
           <></>
