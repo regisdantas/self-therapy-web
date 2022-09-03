@@ -35,3 +35,65 @@ export const getTitle = (type: string): string => {
       return 'Notes';
   }
 };
+export interface IActions {
+  name: string;
+  type: string;
+}
+
+const newEmotion = {
+  name: 'I felt',
+  type: 'emotion',
+};
+
+const newBehavior = {
+  name: 'I acted like',
+  type: 'behavior',
+};
+
+const newThought = {
+  name: 'I thought',
+  type: 'thought',
+};
+
+const newQuestion = {
+  name: `Let's question`,
+  type: 'question',
+};
+
+export const getActions = (type: string): IActions[] => {
+  switch (type) {
+    case 'event':
+      return [newEmotion, newBehavior, newThought];
+    case 'emotion':
+      return [newQuestion];
+    case 'question':
+      return [];
+    case 'thought':
+      return [newQuestion];
+    case 'behavior':
+      return [newQuestion];
+    case 'coping':
+      return [];
+    default:
+      return [];
+  }
+};
+
+export const getColor = (type: string): string => {
+  switch (type) {
+    case 'event':
+      return '#ff0000';
+    case 'emotion':
+      return '#ff0000';
+    case 'question':
+      return '#00ff00';
+    case 'thought':
+      return '#0000ff';
+    case 'behavior':
+      return '#777777';
+    case 'coping':
+      return '#ff0000';
+    default:
+      return '#ff0000';
+  }
+};

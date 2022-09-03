@@ -37,13 +37,34 @@ const Project: React.FC = () => {
       .catch(error => console.log(error));
     console.log('Request made to: users/projects/steps: ', project_id);
   }, [project_id]);
+
+  function onNewCard(parent_id: string, type: string): void {
+    api
+      .post(`users/projects/steps`, { project_id, parent_id, type })
+      .then(response => {
+        response.data && setSteps([...steps, response.data]);
+      })
+      .catch(error => console.log(error));
+    console.log('Create ', parent_id, type);
+  }
+
+  function onDeleteCard() {
+    console.log('Delete');
+  }
+
   return (
     <>
       <Header title="Self Therapy" />
       <MenuBar backPath="/dashboard" handleLogout={logout} />
       {steps.map(step =>
         step.parent_id === '00000000-0000-0000-0000-000000000000' ? (
-          <Card key={step.id} step={step} list={steps} />
+          <Card
+            key={step.id}
+            step={step}
+            list={steps}
+            onNewCard={onNewCard}
+            onDeleteCard={onDeleteCard}
+          />
         ) : (
           <></>
         ),
