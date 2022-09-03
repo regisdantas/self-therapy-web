@@ -5,7 +5,9 @@ import MenuBar from '../../components/MenuBar';
 import Card from '../../components/Card';
 import { logout } from '../../services/auth';
 import { api } from '../../services/api';
-import { getPlaceholder } from '../../models/steps';
+import Status from '../../components/Status';
+import { useStatus } from '../../hooks/useStatus';
+
 interface ILocationState {
   from: {
     pathname: string;
@@ -26,6 +28,7 @@ interface IStep {
 
 const Project: React.FC = () => {
   const [steps, setSteps] = React.useState<IStep[]>([]);
+  const [inputStatus, setInputStatus] = useStatus(null);
   const location = useLocation();
   const { project_id } = location.state as ILocationState;
   React.useEffect(() => {
@@ -43,19 +46,47 @@ const Project: React.FC = () => {
       .post(`users/projects/steps`, { project_id, parent_id, type })
       .then(response => {
         response.data && setSteps([...steps, response.data]);
+        setInputStatus({
+          type: 'success',
+          fields: '',
+          message: 'New card created.',
+        });
       })
-      .catch(error => console.log(error));
-    console.log('Create ', parent_id, type);
+      .catch((error: any) => {
+        setInputStatus({
+          type: 'error',
+          message: 'Failed to create new card: ' + error.response.data.message,
+          fields: '',
+        });
+      });
   }
 
-  function onDeleteCard() {
-    console.log('Delete');
+  function onDeleteCard(step_id: string) {
+    api
+      .delete(`users/projects/steps`, { data: { step_id } })
+      .then(() => {
+        setSteps(prevState => prevState.filter(step => step.id !== step_id));
+        setInputStatus({
+          type: 'success',
+          fields: '',
+          message: 'Card deleted successfully.',
+        });
+      })
+      .catch((error: any) => {
+        setInputStatus({
+          type: 'error',
+          message:
+            'Request to delete card failed: ' + error.response.data.message,
+          fields: '',
+        });
+      });
   }
 
   return (
     <>
       <Header title="Self Therapy" />
       <MenuBar backPath="/dashboard" handleLogout={logout} />
+      <Status status={inputStatus} />
       {steps.map(step =>
         step.parent_id === '00000000-0000-0000-0000-000000000000' ? (
           <Card

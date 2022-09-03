@@ -27,7 +27,7 @@ export const CardContainer = styled.div<CardProps>`
 
   div {
     margin-left: 10px;
-    width: auto;
+    width: 100%;
   }
 
   .ContentContainer {
@@ -40,10 +40,21 @@ export const CardContainer = styled.div<CardProps>`
     margin: 0;
     background: #fff;
     ${props =>
-      props.color &&
       css`
         color: ${shade(0.4, props.color)};
       `}
+
+    header {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      svg {
+        margin: 10px;
+        cursor: pointer;
+      }
+    }
     strong {
       width: 100%;
       padding: 10px;
@@ -77,6 +88,11 @@ export const CardContainer = styled.div<CardProps>`
       margin: 4px;
       p {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        * {
+          margin-right: 5px;
+        }
       }
     }
   }

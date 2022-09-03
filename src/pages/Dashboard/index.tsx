@@ -9,15 +9,6 @@ import { logout } from '../../services/auth';
 import { useStatus } from '../../hooks/useStatus';
 import Status from '../../components/Status';
 
-interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface IProject {
   id: string;
   user_id: string;
@@ -102,7 +93,8 @@ const Dashboard: React.FC = () => {
       .catch((error: any) => {
         setInputStatus({
           type: 'error',
-          message: 'Request to delete project: ' + error.response.data.message,
+          message:
+            'Request to delete project failed: ' + error.response.data.message,
           fields: '',
         });
       });

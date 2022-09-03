@@ -6,6 +6,7 @@ import {
   getActions,
   getColor,
 } from '../../models/steps';
+import { FiTrash2 } from 'react-icons/fi';
 
 interface IStep {
   id: string;
@@ -35,7 +36,15 @@ const Card: React.FC<ICardProps> = ({
   return (
     <CardContainer color={getColor(step.type)}>
       <div className="ContentContainer">
-        <strong>{getTitle(step.type)}</strong>
+        <header>
+          <strong>{getTitle(step.type)}</strong>
+          {step.parent_id !== '00000000-0000-0000-0000-000000000000' ? (
+            <FiTrash2 onClick={e => onDeleteCard(step.id)}></FiTrash2>
+          ) : (
+            <></>
+          )}
+        </header>
+
         <span
           role="textbox"
           contentEditable
@@ -43,12 +52,8 @@ const Card: React.FC<ICardProps> = ({
         ></span>
         <div className="ActionContainer">
           {actions.map((action, index) => (
-            <p
-              key={index}
-              onClick={e => {
-                onNewCard(step.id, action.type);
-              }}
-            >
+            <p key={index} onClick={e => onNewCard(step.id, action.type)}>
+              <action.icon />
               {action.name}
             </p>
           ))}

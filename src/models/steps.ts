@@ -1,3 +1,7 @@
+import { IconType } from 'react-icons';
+import { FiHeart, FiUser, FiTwitch } from 'react-icons/fi';
+import { BiQuestionMark } from 'react-icons/bi';
+
 export const getPlaceholder = (type: string): string => {
   switch (type) {
     case 'event':
@@ -38,26 +42,31 @@ export const getTitle = (type: string): string => {
 export interface IActions {
   name: string;
   type: string;
+  icon: IconType;
 }
 
 const newEmotion = {
   name: 'I felt',
   type: 'emotion',
+  icon: FiHeart,
 };
 
 const newBehavior = {
   name: 'I acted like',
   type: 'behavior',
+  icon: FiUser,
 };
 
 const newThought = {
   name: 'I thought',
   type: 'thought',
+  icon: FiTwitch,
 };
 
 const newQuestion = {
   name: `Let's question`,
   type: 'question',
+  icon: BiQuestionMark,
 };
 
 export const getActions = (type: string): IActions[] => {
@@ -82,18 +91,18 @@ export const getActions = (type: string): IActions[] => {
 export const getColor = (type: string): string => {
   switch (type) {
     case 'event':
-      return '#ff0000';
+      return 'red';
     case 'emotion':
-      return '#ff0000';
+      return 'red';
     case 'question':
-      return '#00ff00';
+      return 'lime';
     case 'thought':
-      return '#0000ff';
+      return 'blue';
     case 'behavior':
-      return '#777777';
+      return 'gray';
     case 'coping':
-      return '#ff0000';
+      return 'yellow';
     default:
-      return '#ff0000';
+      return 'purple';
   }
 };
