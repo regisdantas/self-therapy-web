@@ -1,7 +1,7 @@
 import React from 'react';
 import { CardContainer } from './styles';
 import { getCardModel } from '../../models/steps';
-import { FiTrash2, FiMic } from 'react-icons/fi';
+import { FiTrash2, FiMic, FiSpeaker } from 'react-icons/fi';
 
 interface IStep {
   id: string;
@@ -21,6 +21,7 @@ interface ICardProps {
   onDeleteCard: any;
   onChangeContent: any;
   speechIf: any;
+  onReadContent: any;
 }
 
 const Card: React.FC<ICardProps> = ({
@@ -30,6 +31,7 @@ const Card: React.FC<ICardProps> = ({
   onDeleteCard,
   onChangeContent,
   speechIf,
+  onReadContent,
 }: ICardProps) => {
   const cardModel = getCardModel(step.type);
   const textRef = React.useRef<HTMLSpanElement>(null);
@@ -46,6 +48,7 @@ const Card: React.FC<ICardProps> = ({
                 : speechIf.onStartListening(step.id);
             }}
           />
+          <FiSpeaker onClick={() => onReadContent(step.content)} />
           {step.parent_id !== '00000000-0000-0000-0000-000000000000' ? (
             <FiTrash2 onClick={e => onDeleteCard(step.id)}></FiTrash2>
           ) : (
@@ -84,6 +87,7 @@ const Card: React.FC<ICardProps> = ({
             onDeleteCard={onDeleteCard}
             onChangeContent={onChangeContent}
             speechIf={speechIf}
+            onReadContent={onReadContent}
           />
         ) : (
           <div key={child.id} />

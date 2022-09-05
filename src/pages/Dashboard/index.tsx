@@ -29,7 +29,14 @@ const Dashboard: React.FC = () => {
       .then(response => {
         response.data ? setProjects(response.data) : setProjects([]);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        setInputStatus({
+          type: 'error',
+          fields: '',
+          message:
+            'Failed to load project list: ' + error.response?.data?.message,
+        });
+      });
   }, []);
 
   async function handleNewProject(event: React.FormEvent<HTMLFormElement>) {
@@ -51,7 +58,7 @@ const Dashboard: React.FC = () => {
     } catch (error: any) {
       setInputStatus({
         type: 'error',
-        message: 'Request failed: ' + error.response.data.message,
+        message: 'Request failed: ' + error.response?.data?.message,
         fields: 'project',
       });
       return;
@@ -94,7 +101,8 @@ const Dashboard: React.FC = () => {
         setInputStatus({
           type: 'error',
           message:
-            'Request to delete project failed: ' + error.response.data.message,
+            'Request to delete project failed: ' +
+            error.response?.data?.message,
           fields: '',
         });
       });

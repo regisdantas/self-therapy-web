@@ -107,7 +107,7 @@ const CreateAccount: React.FC = () => {
     } catch (error: any) {
       setInputStatus({
         type: 'error',
-        message: 'Request failed: ' + error.response.data.message,
+        message: 'Request failed: ' + error.response?.data?.message,
         fields: 'name,email,password,confpass',
       });
       return;

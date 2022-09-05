@@ -10,7 +10,7 @@ import { useStatus } from '../../hooks/useStatus';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
-import { stringify } from 'querystring';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 interface ILocationState {
   from: {
@@ -43,6 +43,7 @@ const Project: React.FC = () => {
   const location = useLocation();
   const { project_id } = location.state as ILocationState;
   const [listeningId, setListeningId] = React.useState('');
+  const { speak, cancel } = useSpeechSynthesis();
   const {
     transcript,
     listening,
@@ -61,7 +62,6 @@ const Project: React.FC = () => {
         response.data ? setSteps(response.data) : setSteps([]);
       })
       .catch(error => console.log(error));
-    console.log('Request made to: users/projects/steps: ', project_id);
   }, [project_id]);
 
   function updateStep(oldStep: IStep, newStep: IStep) {
@@ -84,7 +84,8 @@ const Project: React.FC = () => {
       .catch((error: any) => {
         setInputStatus({
           type: 'error',
-          message: 'Failed to create new card: ' + error.response.data.message,
+          message:
+            'Failed to create new card: ' + error.response?.data?.message,
           fields: '',
         });
       });
@@ -105,7 +106,7 @@ const Project: React.FC = () => {
         setInputStatus({
           type: 'error',
           message:
-            'Request to delete card failed: ' + error.response.data.message,
+            'Request to delete card failed: ' + error.response?.data?.message,
           fields: '',
         });
       });
@@ -125,16 +126,16 @@ const Project: React.FC = () => {
         updateStep(step, newStep);
       })
       .catch((error: any) => {
-        console.log(error);
         setInputStatus({
           type: 'error',
-          message: 'Failed to save changes: ' + error.response.data.message,
+          message: 'Failed to save changes: ' + error.response?.data?.message,
           fields: '',
         });
       });
   }
 
   function onStartListening(id: string) {
+    if (!browserSupportsSpeechRecognition) return;
     if (listening) {
       SpeechRecognition.stopListening();
     }
@@ -166,6 +167,11 @@ const Project: React.FC = () => {
     getTranscript: getTranscript,
   };
 
+  function onReadData(data: string) {
+    cancel();
+    speak({ text: data });
+  }
+
   return (
     <>
       <Header title="Self Therapy" />
@@ -181,6 +187,7 @@ const Project: React.FC = () => {
             onDeleteCard={onDeleteCard}
             onChangeContent={onChangeContent}
             speechIf={speechIf}
+            onReadContent={onReadData}
           />
         ) : (
           <></>
