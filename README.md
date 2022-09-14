@@ -16,7 +16,9 @@
 ![Twitter Follow](https://img.shields.io/twitter/follow/regisdantas?style=social)
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/regisdantas)
 
-## This implements a WEB application a Cognitve Behavioral Therapy based therapy API implemented at: ![Self Therapy Server](https://img.shields.io/badge/Self%20Therapy%20Server-GitHub-blue?link=https://github.com/regisdantas/self-therapy-server)
+## This implements a WEB application a Cognitve Behavioral Therapy based therapy API implemented at:
+
+[![Self Therapy Server](https://img.shields.io/badge/Self%20Therapy%20Server-GitHub-blue)](https://github.com/regisdantas/self-therapy-server)
 
 ### Description
 
